@@ -40,13 +40,20 @@ class AnalysisData {
       '南村万博',
       '涌口',
       '万达广场',
+      '天河北',
+      '万胜围',
     ]
     this.infoList = []
     this.start = 0
     this.limit = moment().subtract('days', 5).unix() * 1000
     console.log(new Date(this.limit))
   }
-  async getListdata (area) {
+  async getListdata (area, index) {
+    if (index === 0) {
+      subjectList = []
+    }
+
+    this.infoList = []
     this.start = 0
     await this.getItemData(area)
     sleep.msleep(1000);

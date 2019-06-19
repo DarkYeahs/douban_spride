@@ -14,7 +14,12 @@ const searchlist = [
   '上轩广场',
 ]
 
-schedule.scheduleJob('0 20 * * * *', () => {
+var rule2     = new schedule.RecurrenceRule();
+var times2    = [1,3,4,7,21,26,31,36,41,56,59];
+rule2.minute  = times2;
+
+schedule.scheduleJob(rule2, () => {
+  resultList = []
   getList()
 })
 
@@ -24,7 +29,7 @@ async function getList() {
 
   for (let i = 0; i < len; i++) {
     const searchItem = searchlist[i]
-    const list = await data.getListdata(searchItem)
+    const list = await data.getListdata(searchItem, i)
     resultList = resultList.concat(list)
   }
   writeFile(resultList)
