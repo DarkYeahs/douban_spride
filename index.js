@@ -5,12 +5,12 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const services = require('./services');
+const sleep = require('sleep');
 let resultList = []
 const searchlist = [
   '信业尚誉',
   '东雅园',
   '东豪园',
-  '东怡新区',
   '番禺广场',
   '上轩广场',
   '市桥',
@@ -19,19 +19,21 @@ const searchlist = [
   '鸿成花园',
   '来福园',
   '康乐园',
-  '鸿禧华庭'
+  '鸿禧华庭',
+  '东华花园',
+  '东怡新区',
+  '金海岸花园',
+  '融穗澜湾',
+  '东秀园',
+  '东方白云花园',
+  '东雅园',
+  '盛泰花园',
+  '东方花园',
+  '东怡新地',
+  '侨基花园',
+  '康裕北苑',
+  '北丽园',
 ]
-async function test() {
-  try {
-    const areaList = await services.getAreaList('番禺广场')
-    console.log(areaList)
-  } catch(e) {
-    console.log(e)
-  }
-
-}
-
-test()
 
 
 
@@ -39,10 +41,10 @@ test()
 // var times2    = [1,3,4,7,21,27,35,36,41,56,59];
 // rule2.minute  = times2;
 
-// schedule.scheduleJob('* 20 20 * * *', () => {
-//   resultList = []
-//   getList()
-// })
+schedule.scheduleJob('* 43 21 * * *', () => {
+  resultList = []
+  getList()
+})
 
 
 // resultList = []
@@ -54,6 +56,7 @@ async function getList() {
 
   for (let i = 0; i < len; i++) {
     const searchItem = searchlist[i]
+    sleep.msleep(2000)
     const list = await data.getListdata(searchItem, i)
     resultList = resultList.concat(list)
   }

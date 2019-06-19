@@ -43,14 +43,14 @@ class Services {
     return this._get(link)
   }
 
-  getAreaList(area) {
+  getAreaList(area, jw) {
     const params = {
-      tag: '小区',
-      location: area,
-      region: area,
+      // tag: '小区',
+      query: area,
+      location: jw,
       output: 'json',
       ak: this.applyID,
-      page_size: 20,
+      page_size: 10,
       filter: 'distance',
       radius: 3000,
     }
@@ -74,7 +74,7 @@ class Services {
 
   async __get(url, params) {
     const { status, data } = await this.noInstance
-              .get(url, params)
+              .get(url, {params})
     console.log(params, status)
     // console.log(status)
       if (status === 200) {

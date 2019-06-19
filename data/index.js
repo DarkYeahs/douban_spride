@@ -95,7 +95,7 @@ class AnalysisData {
       html = await services.getPageListInfo(area, this.start)
     }
     catch(e) {
-      console.log('error', e.response && e.response.status, this.start)
+      console.log('error', e, e.response && e.response.status, this.start)
       return false
     }
     // const html = await services.getPageListInfo(area, this.start)
@@ -207,7 +207,7 @@ class AnalysisData {
       sleep.msleep(200);
     }
     catch(e) {
-      console.log('error', e.response && e.response.status, this.start)
+      console.log('error', e, e.response && e.response.status, this.start)
       return false
     }
 
