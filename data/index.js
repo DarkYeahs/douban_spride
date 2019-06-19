@@ -32,6 +32,8 @@ class AnalysisData {
       '已出租',
       '已租',
       '求租',
+      '求整租',
+      '求转租',
       '合租',
       '大石',
       '板桥',
@@ -99,7 +101,7 @@ class AnalysisData {
       let info = {}
       let subjectEl = item.find('.td-subject a')
       let subject = subjectEl.attr('title')
-      subject = subject.replace(/\s+/g, '')
+
       // subject = subject.replace(/\s+/g, '')
       // console.log(subject)
       let time = new Date(item.find('.td-time').attr('title'))

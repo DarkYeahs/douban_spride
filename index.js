@@ -3,6 +3,7 @@ const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const schedule = require('node-schedule');
 let resultList = []
 const searchlist = [
   '信业尚誉',
@@ -13,7 +14,10 @@ const searchlist = [
   '上轩广场',
 ]
 
-getList()
+schedule.scheduleJob('0 20 * * * *', () => {
+  getList()
+})
+
 
 async function getList() {
   const len = searchlist.length
