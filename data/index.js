@@ -42,6 +42,8 @@ class AnalysisData {
       '万达广场',
       '天河北',
       '万胜围',
+      '天河',
+      '锦绣香江'
     ]
     this.infoList = []
     this.start = 0

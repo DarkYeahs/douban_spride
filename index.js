@@ -12,10 +12,17 @@ const searchlist = [
   '东怡新区',
   '番禺广场',
   '上轩广场',
+  '市桥',
+  '富华花园',
+  '瑞华苑',
+  '鸿成花园',
+  '来福园',
+  '康乐园',
+  '鸿禧华庭'
 ]
 
 var rule2     = new schedule.RecurrenceRule();
-var times2    = [1,3,4,7,21,26,31,36,41,56,59];
+var times2    = [1,3,4,7,21,27,31,36,41,56,59];
 rule2.minute  = times2;
 
 schedule.scheduleJob(rule2, () => {
