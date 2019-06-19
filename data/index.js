@@ -180,6 +180,45 @@ class AnalysisData {
 
     return false
   }
+
+  async filterUser(list) {
+    let userList = []
+    let filterList = []
+    const len = list.length
+
+    for(let i = 0; i < len; i++) {
+      const item = list[i]
+      const uid = await this.getUserId(item.link)
+
+      if (userList.indexOf(uid) === -1) {
+        filterList.push(item)
+        userList.push(uid)
+      }
+    }
+
+    return filterList
+  }
+
+  async getUserId(link) {
+    link = link.replace('https://www.douban.com', '')
+    let html = ''
+    try {
+      html = await services.getPageContent(link)
+      sleep.msleep(200);
+    }
+    catch(e) {
+      console.log('error', e.response && e.response.status, this.start)
+      return false
+    }
+
+    const $ = cheerio.load(html);
+    const el = $('.topic-doc .from a')
+    let userLink = el.attr('href')
+    let userID = userLink.replace('https://www.douban.com/people/', '').slice(0, -1)
+    console.log(userLink, userID)
+
+    return userID
+  }
 }
 
 

@@ -22,13 +22,17 @@ const searchlist = [
 ]
 
 var rule2     = new schedule.RecurrenceRule();
-var times2    = [1,3,4,7,21,27,31,36,41,56,59];
+var times2    = [1,3,4,7,21,27,35,36,41,56,59];
 rule2.minute  = times2;
 
-schedule.scheduleJob(rule2, () => {
-  resultList = []
-  getList()
-})
+// schedule.scheduleJob(rule2, () => {
+//   resultList = []
+//   getList()
+// })
+
+
+resultList = []
+getList()
 
 
 async function getList() {
@@ -39,6 +43,8 @@ async function getList() {
     const list = await data.getListdata(searchItem, i)
     resultList = resultList.concat(list)
   }
+
+  resultList = await data.filterUser(resultList)
   writeFile(resultList)
 }
 

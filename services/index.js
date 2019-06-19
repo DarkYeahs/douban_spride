@@ -32,6 +32,11 @@ class Services {
     return this._get('/group/search', { params })
   }
 
+  getPageContent(link) {
+
+    return this._get(link)
+  }
+
   async _get(url, params) {
 
     const { status, data } = await this.instance
