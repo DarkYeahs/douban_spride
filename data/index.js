@@ -39,6 +39,7 @@ class AnalysisData {
       '板桥',
       '南村万博',
       '涌口',
+      '万达广场',
     ]
     this.infoList = []
     this.start = 0
