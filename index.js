@@ -4,6 +4,7 @@ const ejs = require('ejs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
+const services = require('./services');
 let resultList = []
 const searchlist = [
   '信业尚誉',
@@ -20,19 +21,32 @@ const searchlist = [
   '康乐园',
   '鸿禧华庭'
 ]
+async function test() {
+  try {
+    const areaList = await services.getAreaList('番禺广场')
+    console.log(areaList)
+  } catch(e) {
+    console.log(e)
+  }
 
-var rule2     = new schedule.RecurrenceRule();
-var times2    = [1,3,4,7,21,27,35,36,41,56,59];
-rule2.minute  = times2;
+}
 
-// schedule.scheduleJob(rule2, () => {
+test()
+
+
+
+// var rule2     = new schedule.RecurrenceRule();
+// var times2    = [1,3,4,7,21,27,35,36,41,56,59];
+// rule2.minute  = times2;
+
+// schedule.scheduleJob('* 20 20 * * *', () => {
 //   resultList = []
 //   getList()
 // })
 
 
-resultList = []
-getList()
+// resultList = []
+// getList()
 
 
 async function getList() {
