@@ -68,7 +68,7 @@ class AnalysisData {
     this.infoList = []
     this.start = 0
     await this.getItemData(area)
-    sleep.msleep(1000);
+    sleep.msleep(2000);
     let len = this.infoList.length
     let time = 0
 
@@ -203,7 +203,7 @@ class AnalysisData {
       const item = list[i]
       const uid = await this.getUserId(item.link)
 
-      sleep.msleep(1000)
+      sleep.msleep(2000)
       if (userList.indexOf(uid) === -1) {
         filterList.push(item)
         userList.push(uid)

@@ -57,7 +57,7 @@ async function getList() {
     const searchItem = searchlist[i]
     const list = await data.getListdata(searchItem, i)
     resultList = resultList.concat(list)
-    sleep.msleep(2000)
+    sleep.msleep(5000)
   }
 
   resultList = await data.filterUser(resultList)
@@ -78,8 +78,8 @@ const sendEmail = (html) => {
     });
     let mailOptions = {
       from: '"Yeahs" <1550343909@qq.com>',
-      // to: '18814099282@163.com',
-      to: 'Lpy_9292@163.com',
+      to: '18814099282@163.com',
+      // to: 'Lpy_9292@163.com',
       subject: '豆瓣租房',
       html: html
     };
