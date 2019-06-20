@@ -53,7 +53,10 @@ class AnalysisData {
       '汀沙村',
       '科韵路',
       '人和',
-      '华景新城'
+      '华景新城',
+      '华港花园',
+      '客村',
+      '美林海岸花园'
     ]
     this.infoList = []
     this.start = 0
