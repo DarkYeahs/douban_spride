@@ -44,11 +44,20 @@ class AnalysisData {
       '天河北',
       '万胜围',
       '天河',
-      '锦绣香江'
+      '锦绣香江',
+      '科韵路',
+      '白云大道',
+      '林和西',
+      '5号线',
+      '金沙州',
+      '汀沙村',
+      '科韵路',
+      '人和',
+      '华景新城'
     ]
     this.infoList = []
     this.start = 0
-    this.limit = moment().subtract('days', 5).unix() * 1000
+    this.limit = moment().subtract(5, 'days').unix() * 1000
     console.log(new Date(this.limit))
   }
   async getListdata (area, index) {
@@ -132,7 +141,7 @@ class AnalysisData {
         info.place = place
         if (subjectList.indexOf(subject) === -1) {
 
-          console.log(subject, link)
+          // console.log(subject, link)
           this.infoList.push(info)
           subjectList.push(subject)
         }
@@ -157,7 +166,7 @@ class AnalysisData {
     const unlen = unconditionList.length
     const mustlen = mustConditionList.length
 
-    console.log(place)
+    // console.log(place)
 
     if (place.indexOf('广州') === -1) return false
 

@@ -48,7 +48,7 @@ const searchlist = [
 
 resultList = []
 getList()
-
+// console.log(new Date())
 
 async function getList() {
   const len = searchlist.length
@@ -60,8 +60,8 @@ async function getList() {
     sleep.msleep(2000)
   }
 
-  // resultList = await data.filterUser(resultList)
-  // writeFile(resultList)
+  resultList = await data.filterUser(resultList)
+  writeFile(resultList)
 }
 
 
@@ -78,8 +78,8 @@ const sendEmail = (html) => {
     });
     let mailOptions = {
       from: '"Yeahs" <1550343909@qq.com>',
-      to: '18814099282@163.com',
-      // to: 'Lpy_9292@163.com',
+      // to: '18814099282@163.com',
+      to: 'Lpy_9292@163.com',
       subject: '豆瓣租房',
       html: html
     };
