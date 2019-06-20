@@ -78,7 +78,7 @@ const sendEmail = (html) => {
     });
     let mailOptions = {
       from: '"Yeahs" <1550343909@qq.com>',
-      to: '18814099282@163.com',
+      to: '18814099282@163.com, Lpy_9292@163.com',
       // to: 'Lpy_9292@163.com',
       subject: '豆瓣租房',
       html: html
