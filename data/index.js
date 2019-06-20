@@ -2,6 +2,7 @@ const cheerio = require('cheerio');
 const services = require('../services');
 const sleep = require('sleep');
 const moment = require('moment');
+const iconv = require('iconv-lite')
 
 let subjectList = []
 
@@ -116,6 +117,9 @@ class AnalysisData {
       // console.log(subject)
       let time = new Date(item.find('.td-time').attr('title'))
       let place = item.find('td:last-child a').html()
+
+      place = this.decode(place)
+
       if (this.findCondition(subject, time, place)) {
         let replayNum = parseInt(item.find('.td-reply span').html())
         let link = item.find('.td-subject a').attr('href')
@@ -153,9 +157,9 @@ class AnalysisData {
     const unlen = unconditionList.length
     const mustlen = mustConditionList.length
 
-    // console.log(place)
+    console.log(place)
 
-    // if (place.indexOf('广州') === -1) return false
+    if (place.indexOf('广州') === -1) return false
 
     if (unlen === 0 && mustlen === 0 && len === 0) return true
 
@@ -190,6 +194,7 @@ class AnalysisData {
       const item = list[i]
       const uid = await this.getUserId(item.link)
 
+      sleep.msleep(1000)
       if (userList.indexOf(uid) === -1) {
         filterList.push(item)
         userList.push(uid)
@@ -218,6 +223,10 @@ class AnalysisData {
     console.log(userLink, userID)
 
     return userID
+  }
+
+  decode(str) {
+    return unescape(str.replace(/&#x/g, '%u').replace(/;/g, ''))
   }
 }
 

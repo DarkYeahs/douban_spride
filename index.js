@@ -26,7 +26,6 @@ const searchlist = [
   '融穗澜湾',
   '东秀园',
   '东方白云花园',
-  '东雅园',
   '盛泰花园',
   '东方花园',
   '东怡新地',
@@ -41,14 +40,14 @@ const searchlist = [
 // var times2    = [1,3,4,7,21,27,35,36,41,56,59];
 // rule2.minute  = times2;
 
-schedule.scheduleJob('* 43 21 * * *', () => {
-  resultList = []
-  getList()
-})
+// schedule.scheduleJob('* 43 21 * * *', () => {
+//   resultList = []
+//   getList()
+// })
 
 
-// resultList = []
-// getList()
+resultList = []
+getList()
 
 
 async function getList() {
@@ -56,13 +55,13 @@ async function getList() {
 
   for (let i = 0; i < len; i++) {
     const searchItem = searchlist[i]
-    sleep.msleep(2000)
     const list = await data.getListdata(searchItem, i)
     resultList = resultList.concat(list)
+    sleep.msleep(2000)
   }
 
-  resultList = await data.filterUser(resultList)
-  writeFile(resultList)
+  // resultList = await data.filterUser(resultList)
+  // writeFile(resultList)
 }
 
 
