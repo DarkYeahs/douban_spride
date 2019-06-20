@@ -204,8 +204,10 @@ class AnalysisData {
 
     for(let i = 0; i < len; i++) {
       const item = list[i]
-      const uid = await this.getUserId(item.link)
-
+      let uid
+      try {
+        uid = await this.getUserId(item.link)
+      }catch(e){console.log(e)}
       sleep.msleep(2000)
       if (userList.indexOf(uid) === -1) {
         filterList.push(item)
