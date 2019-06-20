@@ -40,14 +40,14 @@ const searchlist = [
 // var times2    = [1,3,4,7,21,27,35,36,41,56,59];
 // rule2.minute  = times2;
 
-// schedule.scheduleJob('* 43 21 * * *', () => {
-//   resultList = []
-//   getList()
-// })
+schedule.scheduleJob('* 45 19 * * *', () => {
+  resultList = []
+  getList()
+})
 
 
-resultList = []
-getList()
+// resultList = []
+// getList()
 // console.log(new Date())
 
 async function getList() {
