@@ -4,9 +4,9 @@ const ejs = require('ejs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
-const services = require('./services');
 const sleep = require('sleep');
 let resultList = []
+//  爬取列表
 const searchlist = [
   '信业尚誉',
   '东雅园',
@@ -34,40 +34,32 @@ const searchlist = [
   '北丽园',
 ]
 
-
-
-// var rule2     = new schedule.RecurrenceRule();
-// var times2    = [1,3,4,7,21,27,35,36,41,56,59];
-// rule2.minute  = times2;
-
 schedule.scheduleJob('* 45 19 * * *', () => {
   resultList = []
   getList()
 })
 
-
-//resultList = []
-//getList()
-// console.log(new Date())
-
+//  爬取豆瓣帖子列表
 async function getList() {
   const len = searchlist.length
 
   for (let i = 0; i < len; i++) {
     const searchItem = searchlist[i]
     const list = await data.getListdata(searchItem, i)
+
     resultList = resultList.concat(list)
+    //  休眠5s中避免豆瓣启用反爬虫操作
     sleep.msleep(5000)
   }
-
+  //  过滤重复发帖人
   resultList = await data.filterUser(resultList)
   writeFile(resultList)
 }
 
-
+//  发送邮件
 const sendEmail = (html) => {
   nodemailer.createTestAccount(() => {
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: 'qq',
       port: 568,
       secure: false,
@@ -76,7 +68,7 @@ const sendEmail = (html) => {
         pass: 'apjxuhnuwytcieae'
       }
     });
-    let mailOptions = {
+    const mailOptions = {
       from: '"Yeahs" <1550343909@qq.com>',
       to: '18814099282@163.com, Lpy_9292@163.com',
   //     to: '18814099282@163.com',
@@ -92,9 +84,8 @@ const sendEmail = (html) => {
   });
 }
 
+//  编写邮件内容并发送
 function writeFile(list) {
-// 写入文件内容（如果文件不存在会创建一个文件）
-// 写入时会先清空文件
   const template = ejs.compile(fs.readFileSync(path.resolve(__dirname, 'template/index.ejs'), 'utf8'));
   const html = template({list, day: new Date()})
   sendEmail(html)

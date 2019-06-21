@@ -25,7 +25,13 @@ class Services {
       return Promise.reject(error);
     });
   }
-
+  /**
+   * 爬取豆瓣讨论帖子列表
+   * @param {*} q 搜索地址
+   * @param {*} start 页面开始下标
+   * @param {*} cat 爬取cat
+   * @param {*} sort 排序方式
+   */
   getPageListInfo(q, start = 0, cat = 1013, sort = 'time') {
     const params = {
       start,
@@ -37,7 +43,10 @@ class Services {
 
     return this._get('/group/search', { params })
   }
-
+  /**
+   * 爬取帖子内容
+   * @param {*} link 帖子链接
+   */
   getPageContent(link) {
 
     return this._get(link)

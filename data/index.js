@@ -2,33 +2,20 @@ const cheerio = require('cheerio');
 const services = require('../services');
 const sleep = require('sleep');
 const moment = require('moment');
-const iconv = require('iconv-lite')
 
 let subjectList = []
 
 class AnalysisData {
   constructor() {
+    //  可选关键字列表
     this.conditionList = [
-      // '转租',
-      // '单间',
-      // '一房一厅',
-      // '猫',
-      // '女'
     ]
+    //  必须关键字列表
     this.mustConditionList = [
-      // '番禺',
-      // '泊寓'
-      // '市桥',
-      // '地铁',
       '租',
-      // '女'
-      // '主卧',
-      // '信业尚誉'
     ]
+    //  过滤关键字列表
     this.unconditionList = [
-      // '女生',
-      // '女性',
-      // '姐',
       '已转租',
       '已出租',
       '已租',
@@ -60,9 +47,10 @@ class AnalysisData {
     ]
     this.infoList = []
     this.start = 0
+    //  爬取帖子的截止时间，当前5天前到今天
     this.limit = moment().subtract(5, 'days').unix() * 1000
-    console.log(new Date(this.limit))
   }
+  //  爬取豆瓣关键字搜索结果列表
   async getListdata (area, index) {
     if (index === 0) {
       subjectList = []
@@ -70,20 +58,21 @@ class AnalysisData {
 
     this.infoList = []
     this.start = 0
+
     await this.getItemData(area)
     sleep.msleep(2000);
+
     let len = this.infoList.length
     let time = 0
-
+    // 如果第一次爬取为空，则直接返回
     if (len === 0) return []
+    // 当爬取到的帖子小于限制时间，则结束爬取
     while(this.infoList[len - 1].timeStamp > this.limit) {
       this.start += 50
 
-      // if (this.start > 500) break;
-
       sleep.msleep(2000);
       let getResult = await this.getItemData(area)
-
+      // 连续爬取三次失败，则结束该关键字的爬取
       if (getResult === false) {
         time++
         if (time === 3) break;
@@ -95,15 +84,22 @@ class AnalysisData {
       }
       len = this.infoList.length
     }
-    // console.log(this.start)
+    //  过滤发帖时间早于限制时间的帖子
     this.infoList = this.infoList.filter(a => {
       return a.timeStamp >= this.limit
     })
     return this.infoList
   }
-
+  /**
+   *解析并返回爬取豆瓣的帖子列表
+   *
+   * @param {*} area  搜索区域
+   * @returns Array
+   * @memberof AnalysisData
+   */
   async getItemData(area) {
     let html
+    //  获取爬取结果
     try {
       html = await services.getPageListInfo(area, this.start)
     }
@@ -111,22 +107,17 @@ class AnalysisData {
       console.log('error', e, e.response && e.response.status, this.start)
       return false
     }
-    // const html = await services.getPageListInfo(area, this.start)
-
     const $ = cheerio.load(html);
     const list = $('.olt tr');
     const len = list.length;
     let infoList = []
-    // let subjectList = []
-    // console.log(html);
+    //  解析数据
     for (let i = 0; i < len; i++) {
       let item = list.eq(i)
       let info = {}
       let subjectEl = item.find('.td-subject a')
       let subject = subjectEl.attr('title')
 
-      // subject = subject.replace(/\s+/g, '')
-      // console.log(subject)
       let time = new Date(item.find('.td-time').attr('title'))
       let place = item.find('td:last-child a').html()
 
@@ -143,8 +134,6 @@ class AnalysisData {
         info.link = link
         info.place = place
         if (subjectList.indexOf(subject) === -1) {
-
-          // console.log(subject, link)
           this.infoList.push(info)
           subjectList.push(subject)
         }
@@ -152,15 +141,15 @@ class AnalysisData {
     }
     return true;
   }
-
-  async getItemContent(url) {
-    let html = ''
-    try {
-
-    }catch(e) {}
-    return content
-  }
-
+  /**
+   *过滤不符合条件的帖子
+   *
+   * @param {*} subject 帖子主题
+   * @param {*} time  帖子时间
+   * @param {*} place 帖子发帖讨论组
+   * @returns Boolean
+   * @memberof AnalysisData
+   */
   findCondition(subject, time, place) {
     const conditionList = this.conditionList
     const unconditionList = this.unconditionList
@@ -168,32 +157,28 @@ class AnalysisData {
     const len = conditionList.length
     const unlen = unconditionList.length
     const mustlen = mustConditionList.length
-
-    // console.log(place)
-
-    if (place.indexOf('广州') === -1) return false
-
+    //  判断搜索讨论组是否为带有广州或者番禺关键字，没有则进行过滤
+    if (place.indexOf('广州') === -1 && place.indexOf('番禺广场') === -1) return false
+    //  判断三个筛选条件是否都为空，为空则返回true
     if (unlen === 0 && mustlen === 0 && len === 0) return true
-
-    // if (time < this.limit) return false
-
+    //  存在过滤关键字则返回false
     for (let i = 0;i < unlen; i++) {
       const uncondition = unconditionList[i]
       if (subject.indexOf(uncondition) > -1) return false
     }
-
+    //  不存在必须关键字的直接返回false
     for (let i = 0;i < mustlen; i++) {
       const mustCondition = mustConditionList[i]
       if (subject.indexOf(mustCondition) === -1) return false
     }
-
+    //  当可选关键字为空时返回true
     if (len === 0) return true
-
+    //  只要存在任意可选关键字的数据则返回true
     for (let i = 0;i < len; i++) {
       const condition = conditionList[i]
       if (subject.indexOf(condition) > -1) return true
     }
-
+    //  不匹配可选关键字的则返回false
     return false
   }
 
