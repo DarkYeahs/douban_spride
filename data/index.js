@@ -240,7 +240,7 @@ class AnalysisData {
   }
 
   decode(str) {
-    return unescape(str.replace(/&#x/g, '%u').replace(/;/g, ''))
+    return decodeURIComponent(str.replace(/&#x/g, '%u').replace(/;/g, ''))
   }
 }
 
