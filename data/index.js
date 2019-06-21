@@ -49,6 +49,7 @@ class AnalysisData {
     this.start = 0
     //  爬取帖子的截止时间，当前5天前到今天
     this.limit = moment().subtract(5, 'days').unix() * 1000
+    console.log(new Date(this.limit))
   }
   //  爬取豆瓣关键字搜索结果列表
   async getListdata (area, index) {
@@ -122,7 +123,7 @@ class AnalysisData {
       let place = item.find('td:last-child a').html()
 
       place = this.decode(place)
-
+      console.log(place)
       if (this.findCondition(subject, time, place)) {
         let replayNum = parseInt(item.find('.td-reply span').html())
         let link = item.find('.td-subject a').attr('href')
@@ -225,10 +226,8 @@ class AnalysisData {
   }
 
   decode(str) {
-    return decodeURIComponent(str.replace(/&#x/g, '%u').replace(/;/g, ''))
+    return unescape(str.replace(/&#x/g, '%u').replace(/;/g, ''))
   }
 }
-
-
 
 module.exports = new AnalysisData();

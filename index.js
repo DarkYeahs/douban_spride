@@ -34,10 +34,13 @@ const searchlist = [
   '北丽园',
 ]
 
-schedule.scheduleJob('* 45 19 * * *', () => {
-  resultList = []
-  getList()
-})
+// schedule.scheduleJob('* 45 19 * * *', () => {
+//   resultList = []
+//   getList()
+// })
+
+resultList = []
+getList()
 
 //  爬取豆瓣帖子列表
 async function getList() {
