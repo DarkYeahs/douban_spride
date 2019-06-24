@@ -33,7 +33,7 @@ class AnalysisData {
       '天河',
       '锦绣香江',
       '科韵路',
-      '白云大道',
+      '白云',
       '林和西',
       '5号线',
       '金沙州',
@@ -61,7 +61,7 @@ class AnalysisData {
     this.start = 0
 
     await this.getItemData(area)
-    sleep.msleep(2000);
+    sleep.msleep(1000 + Math.ceil(1000 * Math.random()));
 
     let len = this.infoList.length
     let time = 0
@@ -70,7 +70,7 @@ class AnalysisData {
     // 当爬取到的帖子小于限制时间，则结束爬取
     while(this.infoList[len - 1].timeStamp > this.limit) {
       this.start += 50
-
+      if (this.start > 500) break
       sleep.msleep(2000);
       let getResult = await this.getItemData(area)
       // 连续爬取三次失败，则结束该关键字的爬取
@@ -159,7 +159,7 @@ class AnalysisData {
     const unlen = unconditionList.length
     const mustlen = mustConditionList.length
     //  判断搜索讨论组是否为带有广州或者番禺关键字，没有则进行过滤
-    if (place.indexOf('广州') === -1 && place.indexOf('番禺广场') === -1) return false
+    if (place.indexOf('广州') === -1 && place.indexOf('番禺') === -1) return false
     //  判断三个筛选条件是否都为空，为空则返回true
     if (unlen === 0 && mustlen === 0 && len === 0) return true
     //  存在过滤关键字则返回false
@@ -192,9 +192,11 @@ class AnalysisData {
       const item = list[i]
       let uid
       try {
+        console.log(item.link)
         uid = await this.getUserId(item.link)
-      }catch(e){console.log(e)}
-      sleep.msleep(2000)
+      }catch(e){console.log('getUserId error', e)}
+      sleep.msleep(2000 + Math.ceil(1000 * Math.random()))
+      if (uid === false) continue
       if (userList.indexOf(uid) === -1) {
         filterList.push(item)
         userList.push(uid)
@@ -218,9 +220,12 @@ class AnalysisData {
 
     const $ = cheerio.load(html);
     const el = $('.topic-doc .from a')
+    const contentEl = $('.topic-richtext')
+    const content = this.decode(contentEl.html())
+    if (content.indexOf('小区') === -1 && content.indexOf('公寓') === -1) return false
     let userLink = el.attr('href')
     let userID = userLink.replace('https://www.douban.com/people/', '').slice(0, -1)
-    console.log(userLink, userID)
+    console.log('uid', userLink, userID)
 
     return userID
   }

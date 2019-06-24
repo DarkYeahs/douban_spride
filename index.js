@@ -52,10 +52,15 @@ async function getList() {
 
     resultList = resultList.concat(list)
     //  休眠5s中避免豆瓣启用反爬虫操作
-    sleep.msleep(5000)
+    sleep.msleep(3000 + 2 * Math.ceil(Math.random() * 1000))
   }
   //  过滤重复发帖人
   resultList = await data.filterUser(resultList)
+  resultList = resultList.sort((a, b) => {
+    return b.timeStamp - a.timeStamp
+  })
+
+  // console.log(resultList)
   writeFile(resultList)
 }
 
@@ -74,7 +79,7 @@ const sendEmail = (html) => {
     const mailOptions = {
       from: '"Yeahs" <1550343909@qq.com>',
       to: '18814099282@163.com, Lpy_9292@163.com',
-  //     to: '18814099282@163.com',
+      // to: '18814099282@163.com',
       subject: '豆瓣租房',
       html: html
     };
